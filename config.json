@@ -1,0 +1,53 @@
+{
+  "book": {
+    "title": "The Skinner",
+    "subtitle": "A text adventure",
+    "chapters_dir": "./book_summary/",
+    "images_dir": "./images/",
+    "manifest": "./images/manifest.json"
+  },
+  "server": {
+    "url": "http://localhost:8080"
+  },
+  "ollama": {
+    "url": "http://localhost:11434/api/chat",
+    "model": "gemma3:27b",
+    "temperature": 0.75,
+    "max_tokens": 1024
+  },
+  "comfyui": {
+    "url": "http://127.0.0.1:8188",
+    "enabled": true,
+    "model": "flux-schnell",
+    "steps": 4,
+    "width": 1344,
+    "height": 768,
+    "style_suffix": "science fiction, biopunk ocean world, dark and oppressive atmosphere, alien sea creatures, grimy frontier settlement, dramatic lighting, detailed digital painting, cinematic composition"
+  },
+  "theme": {
+    "background":       "#07080f",
+    "surface":          "#0d0e1a",
+    "surface_raised":   "#12141f",
+    "border":           "#1e2235",
+    "text":             "#c8bfa8",
+    "text_dim":         "#5a5468",
+    "text_bright":      "#e8dfc8",
+    "accent":           "#3d6b5e",
+    "accent_bright":    "#5a9e8e",
+    "accent_glow":      "rgba(90, 158, 142, 0.15)",
+    "danger":           "#7a1e1e",
+    "danger_bright":    "#c43030",
+    "font_display":     "'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif",
+    "font_body":        "Georgia, 'Times New Roman', serif",
+    "font_ui":          "'Courier New', Courier, monospace",
+    "image_height":     "420px",
+    "narrative_height": "320px"
+  },
+  "game": {
+    "show_hints":            true,
+    "show_inventory":        true,
+    "show_visited_locations": false,
+    "typewriter_speed":      18,
+    "chapter_intro_delay":   800
+  }
+}

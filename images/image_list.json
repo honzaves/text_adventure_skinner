@@ -1,0 +1,27 @@
+[
+  {
+    "type": "location",
+    "slug": "glassite_border",
+    "prompt": "Sharp boundary line between ordered gardens on one side and decaying alien wilderness, rotting organic remains and very alien vegetation, on the other. One transparent glas barrier separating the two. Oppressive overcast sky, alien fantasy frontier world atmosphere, dramatic contrast between sterile technical civilization and savage alien nature"
+  },
+  {
+    "type": "location",
+    "slug": "the_baitman_tavern",
+    "prompt": "Dimly lit alien tavern interior, low ceiling with hanging nets and nautical equipment, harpoons, rough-hewn tables stained with decades of use, flickering bioluminescent lights. Enormous very different looking weathered muscular figures having large drinks. The figures have many scars. Some have hair, some have beards. All figures different postures. Salt-encrusted windows overlooking dark water, oppressive, alien and dangerous atmosphere"
+  },
+  {
+    "type": "creature",
+    "slug": "creature_sail",
+    "prompt": "Alien creature resembling a nautical sail, very thin, body consists of a translucent membrane stretched between organic externities with claws, spanning 3 meters, riding ocean winds, bioluminescent patterns rippling across its surface, alien intelligence visible in its single massive eye, both beautiful and terrifying, alien ocean horizon behind it."
+  },
+  {
+    "type": "creature",
+    "slug": "creature_molly_carp",
+    "prompt": "Alien creature, looking a little bit like a mutated fish, swimming in water. Armored scales, ancient and implacable, patient and terrifying intelligence"
+  },
+  {
+    "type": "scene",
+    "slug": "sail_and_ship",
+    "prompt": "Large sailing vessel sailing along big living flying creature. The creature resembles a nautical sail: thin and translucent, with claws on the edges. The creature would fit on a mast of the ship. Alien ocean, beautiful and threatening simultaneously. The creature is as big as one of the sails on the masts of the ship"
+  }
+]

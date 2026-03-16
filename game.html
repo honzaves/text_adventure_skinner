@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loading...</title>
+<style>
+/* ── CSS Variables (overridden from config.json at runtime) ─────────────── */
+:root {
+  --bg:             #07080f;
+  --surface:        #0d0e1a;
+  --surface-raised: #12141f;
+  --border:         #1e2235;
+  --text:           #c8bfa8;
+  --text-dim:       #5a5468;
+  --text-bright:    #e8dfc8;
+  --accent:         #3d6b5e;
+  --accent-bright:  #5a9e8e;
+  --accent-glow:    rgba(90,158,142,0.15);
+  --danger:         #7a1e1e;
+  --danger-bright:  #c43030;
+  --font-display:   'Palatino Linotype', Palatino, Georgia, serif;
+  --font-body:      Georgia, 'Times New Roman', serif;
+  --font-ui:        'Courier New', Courier, monospace;
+  --image-height:   420px;
+  --narrative-height: 320px;
+}
+
+/* ── Reset & Base ───────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.7;
+  overflow: hidden;
+}
+
+/* ── Loading Screen ─────────────────────────────────────────────────────── */
+#loading {
+  position: fixed; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  background: var(--bg);
+  z-index: 100;
+  gap: 24px;
+  transition: opacity 0.8s ease;
+}
+#loading.fade-out { opacity: 0; pointer-events: none; }
+
+.loading-title {
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  color: var(--text-bright);
+  letter-spacing: 0.08em;
+  text-align: center;
+}
+.loading-sub {
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-align: center;
+}
+.loading-bar {
+  width: 200px; height: 2px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.loading-bar-fill {
+  height: 100%;
+  background: var(--accent-bright);
+  width: 0%;
+  transition: width 0.4s ease;
+}
+
+/* ── Title Screen ───────────────────────────────────────────────────────── */
+#title-screen {
+  position: fixed; inset: 0;
+  display: none;
+  flex-direction: column;
+  align-items: center; justify-content: center;
+  background: var(--bg);
+  z-index: 90;
+  gap: 32px;
+  background-image:
+    radial-gradient(ellipse at 30% 60%, rgba(61,107,94,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse at 70% 30%, rgba(20,30,60,0.3) 0%, transparent 60%);
+}
+#title-screen.visible { display: flex; }
+
+.title-ornament {
+  font-family: var(--font-ui);
+  font-size: 0.65rem;
+  color: var(--accent);
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+}
+.title-main {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  color: var(--text-bright);
+  letter-spacing: 0.05em;
+  text-align: center;
+  text-shadow: 0 0 60px rgba(90,158,142,0.2);
+  line-height: 1.2;
+}
+.title-subtitle {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--text-dim);
+  font-style: italic;
+  letter-spacing: 0.15em;
+}
+.title-divider {
+  width: 120px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+}
+.title-start-btn {
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  color: var(--accent-bright);
+  background: transparent;
+  border: 1px solid var(--accent);
+  padding: 12px 36px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 8px;
+}
+.title-start-btn:hover {
+  background: var(--accent-glow);
+  border-color: var(--accent-bright);
+  box-shadow: 0 0 20px var(--accent-glow);
+}
+.title-continue-btn {
+  border-color: var(--border);
+  color: var(--text-dim);
+  margin-top: -16px;
+  font-size: 0.7rem;
+}
+.title-continue-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent-bright);
+}
+.title-reset-btn {
+  font-family: var(--font-ui);
+  font-size: 0.6rem;
+  color: var(--text);
+  background: transparent;
+  border: none;
+  padding: 6px 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  opacity: 0.65;
+  transition: opacity 0.3s ease, color 0.3s ease;
+  position: absolute;
+  bottom: 32px;
+}
+.title-reset-btn:hover {
+  opacity: 1;
+  color: var(--danger-bright);
+}
+
+/* ── Game Layout ────────────────────────────────────────────────────────── */
+#game-screen {
+  display: none;
+  flex-direction: column;
+  height: 100vh;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+#game-screen.visible { display: flex; }
+
+/* ── Header ─────────────────────────────────────────────────────────────── */
+#game-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  flex-shrink: 0;
+  gap: 16px;
+}
+#header-title {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--text-bright);
+  font-style: italic;
+  white-space: nowrap;
+}
+#header-chapter {
+  font-family: var(--font-ui);
+  font-size: 0.65rem;
+  color: var(--accent-bright);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-align: center;
+  flex: 1;
+}
+#header-character {
+  font-family: var(--font-ui);
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* ── Image Panel ────────────────────────────────────────────────────────── */
+#image-panel {
+  position: relative;
+  height: var(--image-height);
+  flex-shrink: 0;
+  overflow: hidden;
+  background: var(--surface);
+}
+#scene-image {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.8s ease;
+}
+#scene-image.hidden { opacity: 0; }
+#image-placeholder {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--surface);
+}
+.placeholder-symbol {
+  font-family: var(--font-ui);
+  font-size: 0.65rem;
+  color: var(--border);
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+}
+#image-caption {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 20px 20px 10px;
+  background: linear-gradient(transparent, rgba(7,8,15,0.85));
+  font-family: var(--font-ui);
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+#generating-indicator {
+  position: absolute;
+  top: 12px; right: 12px;
+  font-family: var(--font-ui);
+  font-size: 0.6rem;
+  color: var(--accent-bright);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  display: none;
+  animation: pulse 1.5s ease infinite;
+}
+@keyframes pulse { 0%,100%{opacity:0.4} 50%{opacity:1} }
+
+/* ── Narrative Panel ────────────────────────────────────────────────────── */
+#narrative-panel {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 28px;
+  background: var(--bg);
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+#narrative-panel::-webkit-scrollbar { width: 4px; }
+#narrative-panel::-webkit-scrollbar-track { background: transparent; }
+#narrative-panel::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.narrative-entry {
+  margin-bottom: 20px;
+  animation: fadeIn 0.4s ease;
+}
+@keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }
+
+.narrative-player {
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  color: var(--accent-bright);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  padding-left: 2px;
+  border-left: 2px solid var(--accent);
+  padding-left: 10px;
+}
+.narrative-text {
+  font-family: var(--font-body);
+  font-size: 0.975rem;
+  color: var(--text);
+  line-height: 1.8;
+}
+.narrative-text p { margin-bottom: 10px; }
+.narrative-text p:last-child { margin-bottom: 0; }
+
+.chapter-header-entry {
+  border-left: 2px solid var(--accent);
+  padding: 12px 16px;
+  margin-bottom: 24px;
+  background: var(--surface);
+}
+.chapter-header-entry .ch-label {
+  font-family: var(--font-ui);
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.chapter-header-entry .ch-title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--text-bright);
+  font-style: italic;
+}
+.chapter-header-entry .ch-character {
+  font-family: var(--font-ui);
+  font-size: 0.65rem;
+  color: var(--accent-bright);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-top: 6px;
+}
+
+.hint-text {
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  font-style: italic;
+  margin-top: 10px;
+  padding-left: 10px;
+  border-left: 1px solid var(--border);
+}
+
+.system-message {
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  text-align: center;
+  padding: 12px;
+  letter-spacing: 0.1em;
+}
+.chapter-advance-prompt {
+  text-align: center;
+  margin: 20px 0;
+}
+.chapter-advance-btn {
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  color: var(--accent-bright);
+  background: transparent;
+  border: 1px solid var(--accent);
+  padding: 10px 28px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.chapter-advance-btn:hover {
+  background: var(--accent-glow);
+  border-color: var(--accent-bright);
+}
+
+/* ── Status Bar ─────────────────────────────────────────────────────────── */
+#status-bar {
+  display: flex;
+  align-items: center;
+  padding: 6px 20px;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  gap: 16px;
+  flex-shrink: 0;
+  min-height: 34px;
+  flex-wrap: wrap;
+}
+#location-display {
+  font-family: var(--font-ui);
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+#location-display span { color: var(--text); }
+
+#inventory-display {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  flex: 1;
+}
+.inventory-item {
+  font-family: var(--font-ui);
+  font-size: 0.6rem;
+  color: var(--accent-bright);
+  background: rgba(61,107,94,0.1);
+  border: 1px solid var(--accent);
+  padding: 2px 8px;
+  letter-spacing: 0.1em;
+  border-radius: 2px;
+}
+
+/* ── Input Panel ─────────────────────────────────────────────────────────── */
+#input-panel {
+  padding: 12px 20px 16px;
+  background: var(--surface);
+  flex-shrink: 0;
+}
+#input-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+#player-input {
+  flex: 1;
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  color: var(--text-bright);
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  padding: 10px 14px;
+  outline: none;
+  transition: border-color 0.2s ease;
+  letter-spacing: 0.04em;
+}
+#player-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent-glow) inset;
+}
+#player-input::placeholder { color: var(--text-dim); }
+#player-input:disabled { opacity: 0.4; cursor: not-allowed; }
+
+#send-btn {
+  background: var(--accent);
+  border: none;
+  color: var(--text-bright);
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  padding: 10px 20px;
+  cursor: pointer;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+#send-btn:hover:not(:disabled) {
+  background: var(--accent-bright);
+}
+#send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+#thinking-indicator {
+  font-family: var(--font-ui);
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  letter-spacing: 0.2em;
+  text-align: center;
+  padding: 4px 0 0;
+  height: 20px;
+  transition: opacity 0.3s;
+}
+#thinking-indicator.hidden { opacity: 0; }
+</style>
+</head>
+<body>
+
+<!-- ── Loading Screen ──────────────────────────────────────────────────────── -->
+<div id="loading">
+  <div class="loading-title" id="loading-title">Loading...</div>
+  <div class="loading-bar"><div class="loading-bar-fill" id="loading-bar"></div></div>
+  <div class="loading-sub" id="loading-status">initialising</div>
+</div>
+
+<!-- ── Title Screen ────────────────────────────────────────────────────────── -->
+<div id="title-screen">
+  <div class="title-ornament" id="title-ornament">◈ &nbsp; text adventure &nbsp; ◈</div>
+  <div class="title-main" id="title-main">Book Title</div>
+  <div class="title-divider"></div>
+  <div class="title-subtitle" id="title-subtitle">A text adventure</div>
+  <button class="title-start-btn" id="start-btn">New Game</button>
+  <button class="title-start-btn title-continue-btn" id="continue-btn" style="display:none">Continue</button>
+  <button class="title-reset-btn" id="reset-btn">⚠ reset all data</button>
+</div>
+
+<!-- ── Game Screen ─────────────────────────────────────────────────────────── -->
+<div id="game-screen">
+
+  <header id="game-header">
+    <div id="header-title">—</div>
+    <div id="header-chapter">Chapter 1</div>
+    <div id="header-character">—</div>
+  </header>
+
+  <div id="image-panel">
+    <img id="scene-image" src="" alt="" class="hidden">
+    <div id="image-placeholder">
+      <div class="placeholder-symbol">no image</div>
+    </div>
+    <div id="image-caption"></div>
+    <div id="generating-indicator">⟳ generating</div>
+  </div>
+
+  <div id="narrative-panel">
+    <div id="narrative-content"></div>
+  </div>
+
+  <div id="status-bar">
+    <div id="location-display">loc: <span id="location-name">unknown</span></div>
+    <div id="inventory-display"></div>
+  </div>
+
+  <div id="input-panel">
+    <div id="input-row">
+      <input type="text" id="player-input" placeholder="What do you do?" autocomplete="off" spellcheck="false">
+      <button id="send-btn">Enter</button>
+    </div>
+    <div id="thinking-indicator" class="hidden">· · ·</div>
+  </div>
+
+</div>
+
+<script>
+'use strict';
+
+// ── Game State ───────────────────────────────────────────────────────────────
+
+const G = {
+  config:          null,
+  manifest:        {},
+  chapterFiles:    [],
+  chapterIndex:    0,
+  chapter:         null,   // parsed chapter object
+  character:       '',
+  location:        '',
+  inventory:       [],
+  conversationHistory: [],
+  isProcessing:    false,
+  chapterComplete: false,
+};
+
+// ── Chapter progress persistence ─────────────────────────────────────────────
+
+// Derived from config at boot — prefixes ALL localStorage keys for this game
+// so multiple games on different ports never collide.
+let STORAGE_PREFIX = 'game_';      // updated in boot() once config is loaded
+let PROGRESS_KEY   = 'game_progress';  // updated in boot()
+
+function saveProgress(chapterIndex) {
+  try {
+    const data = {
+      lastCompleted: chapterIndex,
+      savedAt: new Date().toISOString()
+    };
+    localStorage.setItem(PROGRESS_KEY, JSON.stringify(data));
+  } catch (e) {
+    console.warn('Could not save progress:', e);
+  }
+}
+
+function loadProgress() {
+  try {
+    const raw = localStorage.getItem(PROGRESS_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
+
+function clearProgress() {
+  try { localStorage.removeItem(PROGRESS_KEY); } catch {}
+}
+
+
+// ── Boot sequence ────────────────────────────────────────────────────────────
+
+async function boot() {
+  setLoadingStatus('loading config...', 10);
+  G.config = await fetchJSON('/config.json');
+  PROGRESS_KEY   = 'game_progress_' + G.config.book.title.toLowerCase().replace(/\s+/g, '_');
+  STORAGE_PREFIX = 'game_' + G.config.book.title.toLowerCase().replace(/\s+/g, '_') + '_';
+  applyTheme(G.config.theme);
+  document.title = G.config.book.title;
+
+  setLoadingStatus('loading image manifest...', 35);
+  try {
+    G.manifest = await fetchJSON(G.config.book.manifest);
+  } catch {
+    G.manifest = {};
+    console.warn('No manifest found — pre-generated images disabled');
+  }
+
+  setLoadingStatus('loading chapters...', 60);
+  const chapResp = await fetchJSON('/api/chapters');
+  G.chapterFiles = chapResp.chapters;
+  if (G.chapterFiles.length === 0) {
+    setLoadingStatus('ERROR: no chapter files found', 100);
+    return;
+  }
+
+  setLoadingStatus('ready', 100);
+  await sleep(400);
+
+  // Show title screen or go straight to game
+  if (G.config.game.title_screen !== false) {
+    showTitleScreen();
+  } else {
+    startGame();
+  }
+}
+
+function applyTheme(theme) {
+  if (!theme) return;
+  const map = {
+    background:       '--bg',
+    surface:          '--surface',
+    surface_raised:   '--surface-raised',
+    border:           '--border',
+    text:             '--text',
+    text_dim:         '--text-dim',
+    text_bright:      '--text-bright',
+    accent:           '--accent',
+    accent_bright:    '--accent-bright',
+    accent_glow:      '--accent-glow',
+    danger:           '--danger',
+    danger_bright:    '--danger-bright',
+    font_display:     '--font-display',
+    font_body:        '--font-body',
+    font_ui:          '--font-ui',
+    image_height:     '--image-height',
+    narrative_height: '--narrative-height',
+  };
+  const root = document.documentElement;
+  for (const [key, cssVar] of Object.entries(map)) {
+    if (theme[key]) root.style.setProperty(cssVar, theme[key]);
+  }
+}
+
+function showTitleScreen() {
+  const t = G.config.book;
+  document.getElementById('title-main').textContent = t.title;
+  document.getElementById('title-subtitle').textContent = t.subtitle || 'A text adventure';
+
+  // Show continue button if saved progress exists
+  const progress = loadProgress();
+  const resumeIndex = progress ? progress.lastCompleted + 1 : 0;
+  const continueBtn = document.getElementById('continue-btn');
+
+  if (progress && resumeIndex < G.chapterFiles.length) {
+    continueBtn.textContent = `Continue \u2014 Chapter ${resumeIndex + 1}`;
+    continueBtn.style.display = 'block';
+  } else {
+    continueBtn.style.display = 'none';
+  }
+
+  document.getElementById('loading').classList.add('fade-out');
+  setTimeout(() => {
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('title-screen').classList.add('visible');
+  }, 800);
+}
+
+document.getElementById('reset-btn').addEventListener('click', () => {
+  if (!confirm('Reset all saved data? This clears progress and cached images for this game. Cannot be undone.')) return;
+  // Only remove keys belonging to this game — other games on other ports are untouched.
+  try {
+    const keysToRemove = Object.keys(localStorage).filter(k => k.startsWith(STORAGE_PREFIX));
+    keysToRemove.forEach(k => localStorage.removeItem(k));
+  } catch {}
+  // Wipe in-memory manifest so dynamic images regenerate this session
+  G.manifest = {};
+  // Visual feedback before reload
+  const btn = document.getElementById('reset-btn');
+  btn.textContent = '✓ cleared — reloading…';
+  setTimeout(() => location.reload(), 800);
+});
+
+document.getElementById('start-btn').addEventListener('click', () => {
+  clearProgress();
+  document.getElementById('title-screen').classList.remove('visible');
+  startGame(0);
+});
+
+document.getElementById('continue-btn').addEventListener('click', () => {
+  const progress = loadProgress();
+  const resumeIndex = progress ? progress.lastCompleted + 1 : 0;
+  document.getElementById('title-screen').classList.remove('visible');
+  startGame(resumeIndex);
+});
+
+async function startGame(fromChapter = 0) {
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('title-screen').classList.remove('visible');
+  document.getElementById('game-screen').classList.add('visible');
+
+  await loadChapter(fromChapter);
+  focusInput();
+}
+
+
+// ── Chapter loading & parsing ─────────────────────────────────────────────────
+
+async function loadChapter(index) {
+  if (index >= G.chapterFiles.length) {
+    appendSystemMessage('— End of available chapters —');
+    return;
+  }
+
+  G.chapterIndex       = index;
+  G.conversationHistory = [];
+  G.chapterComplete    = false;
+
+  const md = await fetchText('/' + G.chapterFiles[index]);
+  G.chapter = parseChapter(md);
+
+  // Set player character from first character listed
+  if (G.chapter.characters.length > 0) {
+    G.character = G.chapter.characters[0].name;
+  }
+
+  // Set initial location from first location listed
+  if (G.chapter.locations.length > 0) {
+    G.location = G.chapter.locations[0].name;
+  }
+
+  // Update UI
+  const total = G.chapterFiles.length;
+  document.getElementById('header-title').textContent = G.config.book.title;
+  document.getElementById('header-chapter').textContent =
+    `Chapter ${index + 1} / ${total}`;
+  document.getElementById('header-character').textContent =
+    `Playing as ${G.character}`;
+  updateLocationDisplay();
+  updateInventoryDisplay();
+
+  // Chapter intro in narrative
+  appendChapterHeader(G.chapter.title, G.character, index + 1);
+
+  await sleep(G.config.game.chapter_intro_delay || 600);
+
+  // Kick off the chapter with an opening narration
+  await callGameMaster('(begin this chapter with an atmospheric opening narration that sets the scene)');
+  enableInput();
+}
+
+function parseChapter(markdown) {
+  const chapter = {
+    title: '',
+    raw: markdown,
+    events: '',
+    characters: [],
+    locations: [],
+    creatures: [],
+    items: [],
+    lore: '',
+    tone: '',
+  };
+
+  // Title
+  const titleMatch = markdown.match(/^# Chapter:\s*(.+)$/m);
+  if (titleMatch) chapter.title = titleMatch[1].trim();
+
+  // Section extractor
+  const getSection = (heading) => {
+    const re = new RegExp(`## ${heading}[\\s\\S]*?(?=\\n## |$)`, 'i');
+    const m = markdown.match(re);
+    return m ? m[0].replace(/^## .+\n/, '').trim() : '';
+  };
+
+  chapter.events    = getSection('Events');
+  chapter.lore      = getSection('Lore.*');
+  chapter.tone      = getSection('Tone.*');
+
+  // Parse characters
+  const charSection = getSection('Characters Present');
+  const charLines   = charSection.match(/^[-*]\s+\*\*(.+?)\*\*[:：]?\s*(.*)$/mg) || [];
+  chapter.characters = charLines.map(line => {
+    const m = line.match(/^[-*]\s+\*\*(.+?)\*\*[:：]?\s*(.*)$/);
+    return m ? { name: m[1].trim(), description: m[2].trim() } : null;
+  }).filter(Boolean);
+
+  // Parse locations
+  const locSection  = getSection('Locations');
+  const locLines    = locSection.match(/^[-*]\s+\*\*(.+?)\*\*[:：]?\s*(.*)$/mg) || [];
+  chapter.locations = locLines.map(line => {
+    const m = line.match(/^[-*]\s+\*\*(.+?)\*\*[:：]?\s*(.*)$/);
+    return m ? { name: m[1].trim(), description: m[2].trim() } : null;
+  }).filter(Boolean);
+
+  // Parse creatures
+  const creSection  = getSection('Creatures.*');
+  const creLines    = creSection.match(/^[-*]\s+\*\*(.+?)\*\*[:：]?\s*(.*)$/mg) || [];
+  chapter.creatures = creLines.map(line => {
+    const m = line.match(/^[-*]\s+\*\*(.+?)\*\*[:：]?\s*(.*)$/);
+    return m ? { name: m[1].trim(), description: m[2].trim() } : null;
+  }).filter(Boolean);
+
+  return chapter;
+}
+
+
+// ── LLM integration ───────────────────────────────────────────────────────────
+
+function buildSystemPrompt() {
+  const ch = G.chapter;
+  const cfg = G.config.ollama;
+  const imageSlugs = Object.keys(G.manifest);
+
+  const charList = ch.characters.map(c =>
+    `  - ${c.name}: ${c.description}`).join('\n');
+  const locList  = ch.locations.map(l =>
+    `  - ${l.name}: ${l.description}`).join('\n');
+  const creList  = ch.creatures.map(c =>
+    `  - ${c.name}: ${c.description}`).join('\n');
+
+  return `You are the game master for a chapter-based text adventure game.
+
+== CHAPTER: ${ch.title} ==
+
+PLAYER CHARACTER: ${G.character}
+
+EVENTS OF THIS CHAPTER (guide the player through these):
+${ch.events}
+
+CHARACTERS IN THIS CHAPTER:
+${charList || '  (none listed)'}
+
+LOCATIONS IN THIS CHAPTER:
+${locList || '  (none listed)'}
+
+CREATURES:
+${creList || '  (none listed)'}
+
+WORLD LORE:
+${ch.lore}
+
+TONE & ATMOSPHERE:
+${ch.tone}
+
+== CURRENT GAME STATE ==
+Location: ${G.location}
+Inventory: ${G.inventory.length > 0 ? G.inventory.join(', ') : 'nothing'}
+
+== AVAILABLE SCENE IMAGES (use exact slug or null) ==
+${imageSlugs.length > 0 ? imageSlugs.join(', ') : '(none available)'}
+
+== GAME MASTER INSTRUCTIONS ==
+- Write immersive, atmospheric narrative in 2nd person ("you see...", "you feel...")
+- Stay true to the tone and events of this chapter but allow player creativity
+- When the player has experienced the key events of the chapter, set chapter_complete to true
+- Choose image_slug that best matches the current scene from the available list, or null
+- Keep narrative to 2-4 short paragraphs
+
+== RESPONSE FORMAT ==
+Respond ONLY with valid JSON. No markdown, no code blocks, no preamble. Exactly this structure:
+{
+  "narrative": "your narrative text here, use \\n\\n for paragraph breaks",
+  "image_slug": "slug_or_null",
+  "new_location": "location name or null if unchanged",
+  "inventory_add": [],
+  "inventory_remove": [],
+  "chapter_complete": false,
+  "hint": "one subtle hint of what to try next"
+}`;
+}
+
+async function callGameMaster(playerInput) {
+  if (G.isProcessing) return;
+  G.isProcessing = true;
+  disableInput();
+  showThinking(true);
+
+  // Add player message to history
+  if (playerInput && !playerInput.startsWith('(')) {
+    appendPlayerAction(playerInput);
+  }
+
+  G.conversationHistory.push({
+    role: 'user',
+    content: playerInput
+  });
+
+  const messages = [
+    { role: 'system', content: buildSystemPrompt() },
+    ...G.conversationHistory
+  ];
+
+  try {
+    const raw = await ollamaChat(messages);
+    const response = parseGMResponse(raw);
+
+    // Update state
+    if (response.new_location) {
+      G.location = response.new_location;
+      updateLocationDisplay();
+    }
+    if (response.inventory_add?.length)    addToInventory(response.inventory_add);
+    if (response.inventory_remove?.length) removeFromInventory(response.inventory_remove);
+
+    // Show image
+    if (response.image_slug) {
+      await showImage(response.image_slug);
+    }
+
+    // Show narrative
+    appendNarrative(response.narrative, response.hint);
+
+    // Store assistant response in history
+    G.conversationHistory.push({
+      role: 'assistant',
+      content: raw
+    });
+
+    // Chapter complete?
+    if (response.chapter_complete && !G.chapterComplete) {
+      G.chapterComplete = true;
+      saveProgress(G.chapterIndex);
+      appendChapterComplete();
+    }
+
+  } catch (err) {
+    appendSystemMessage(`Error: ${err.message}`);
+    console.error(err);
+  }
+
+  showThinking(false);
+  G.isProcessing = false;
+  if (!G.chapterComplete) enableInput();
+}
+
+function parseGMResponse(raw) {
+  // Strip markdown code fences if present
+  let text = raw.trim();
+  text = text.replace(/^```json\s*/i, '').replace(/```\s*$/, '').trim();
+  text = text.replace(/^```\s*/,    '').replace(/```\s*$/, '').trim();
+
+  try {
+    return JSON.parse(text);
+  } catch {
+    // Try to extract JSON object from messy response
+    const match = text.match(/\{[\s\S]*\}/);
+    if (match) {
+      try { return JSON.parse(match[0]); } catch {}
+    }
+    // Fallback: treat as raw narrative
+    return {
+      narrative: raw,
+      image_slug: null,
+      new_location: null,
+      inventory_add: [],
+      inventory_remove: [],
+      chapter_complete: false,
+      hint: null
+    };
+  }
+}
+
+async function ollamaChat(messages) {
+  const cfg = G.config.ollama;
+  const payload = {
+    model: cfg.model,
+    messages,
+    stream: false,
+    options: {
+      temperature: cfg.temperature ?? 0.75,
+      num_predict: cfg.max_tokens ?? 1024,
+    }
+  };
+
+  const resp = await fetch('/ollama/api/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  });
+
+  if (!resp.ok) throw new Error(`Ollama error: ${resp.status} ${resp.statusText}`);
+  const data = await resp.json();
+  return data.message?.content ?? '';
+}
+
+
+// ── Image display ─────────────────────────────────────────────────────────────
+
+async function showImage(slug) {
+  const entry = G.manifest[slug];
+  const img   = document.getElementById('scene-image');
+  const ph    = document.getElementById('image-placeholder');
+  const cap   = document.getElementById('image-caption');
+
+  if (entry) {
+    // Pre-generated image
+    img.classList.add('hidden');
+    await sleep(200);
+    img.src = entry.path;
+    img.onload = () => {
+      img.classList.remove('hidden');
+      ph.style.display = 'none';
+    };
+    img.onerror = () => { ph.style.display = 'flex'; };
+    cap.textContent = slug.replace(/_/g, ' ');
+  } else if (G.config.comfyui?.enabled) {
+    // Attempt dynamic generation
+    generateImageDynamic(slug);
+  }
+}
+
+async function generateImageDynamic(slug) {
+  const gen = document.getElementById('generating-indicator');
+  gen.style.display = 'block';
+
+  try {
+    const cfg    = G.config;
+    const prompt = `${slug.replace(/_/g, ' ')}, ${cfg.comfyui.style_suffix}`;
+    const workflow = buildFluxWorkflow(prompt, cfg.comfyui);
+
+    const submitResp = await fetch(`${cfg.comfyui.url}/prompt`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt: workflow })
+    });
+    if (!submitResp.ok) throw new Error('ComfyUI submit failed');
+    const { prompt_id } = await submitResp.json();
+
+    // Poll for result
+    for (let i = 0; i < 120; i++) {
+      await sleep(2000);
+      const histResp = await fetch(`${cfg.comfyui.url}/history/${prompt_id}`);
+      const hist = await histResp.json();
+      if (hist[prompt_id]?.outputs) {
+        const outputs = hist[prompt_id].outputs;
+        for (const node of Object.values(outputs)) {
+          if (node.images?.[0]) {
+            const { filename, subfolder, type } = node.images[0];
+            const url = `${cfg.comfyui.url}/view?filename=${filename}&subfolder=${subfolder}&type=${type}`;
+            await showImageUrl(url, slug);
+            // Cache in manifest for this session
+            G.manifest[slug] = { path: url, type: 'dynamic' };
+            return;
+          }
+        }
+      }
+    }
+  } catch (err) {
+    console.warn('Dynamic image generation failed:', err);
+  } finally {
+    gen.style.display = 'none';
+  }
+}
+
+async function showImageUrl(url, slug) {
+  const img = document.getElementById('scene-image');
+  const ph  = document.getElementById('image-placeholder');
+  const cap = document.getElementById('image-caption');
+  img.classList.add('hidden');
+  await sleep(200);
+  img.src = url;
+  img.onload = () => { img.classList.remove('hidden'); ph.style.display = 'none'; };
+  cap.textContent = slug.replace(/_/g, ' ');
+}
+
+function buildFluxWorkflow(prompt, comfyCfg) {
+  const model   = comfyCfg.model === 'flux-dev' ? 'flux1-dev.safetensors' : 'flux1-schnell.safetensors';
+  const steps   = comfyCfg.steps  ?? 4;
+  const width   = comfyCfg.width  ?? 1344;
+  const height  = comfyCfg.height ?? 768;
+  const guidance = comfyCfg.model === 'flux-dev' ? 3.5 : 1.0;
+  const seed    = Math.floor(Math.random() * 2**32);
+
+  return {
+    "1": { "class_type": "UNETLoader",       "inputs": { "unet_name": model, "weight_dtype": "default" }},
+    "2": { "class_type": "VAELoader",        "inputs": { "vae_name": "ae.safetensors" }},
+    "3": { "class_type": "DualCLIPLoader",   "inputs": { "clip_name1": "clip_l.safetensors", "clip_name2": "t5xxl_fp16.safetensors", "type": "flux" }},
+    "4": { "class_type": "CLIPTextEncode",   "inputs": { "text": prompt, "clip": ["3",0] }},
+    "5": { "class_type": "EmptyLatentImage", "inputs": { "width": width, "height": height, "batch_size": 1 }},
+    "6": { "class_type": "FluxGuidance",     "inputs": { "guidance": guidance, "conditioning": ["4",0] }},
+    "7": { "class_type": "KSampler",         "inputs": { "model": ["1",0], "positive": ["6",0], "negative": ["4",0], "latent_image": ["5",0], "seed": seed, "steps": steps, "cfg": 1.0, "sampler_name": "euler", "scheduler": "simple", "denoise": 1.0 }},
+    "8": { "class_type": "VAEDecode",        "inputs": { "samples": ["7",0], "vae": ["2",0] }},
+    "9": { "class_type": "SaveImage",        "inputs": { "filename_prefix": "game_dynamic", "images": ["8",0] }},
+  };
+}
+
+
+// ── UI helpers ────────────────────────────────────────────────────────────────
+
+function appendChapterHeader(title, character, num) {
+  const el = document.createElement('div');
+  el.className = 'chapter-header-entry narrative-entry';
+  el.innerHTML = `
+    <div class="ch-label">Chapter ${num}</div>
+    <div class="ch-title">${escHtml(title)}</div>
+    <div class="ch-character">Playing as ${escHtml(character)}</div>
+  `;
+  narrativeContent().appendChild(el);
+  scrollNarrative();
+}
+
+function appendPlayerAction(text) {
+  const el = document.createElement('div');
+  el.className = 'narrative-entry';
+  el.innerHTML = `<div class="narrative-player">&gt; ${escHtml(text)}</div>`;
+  narrativeContent().appendChild(el);
+  scrollNarrative();
+}
+
+function appendNarrative(text, hint) {
+  const el = document.createElement('div');
+  el.className = 'narrative-entry';
+
+  const paragraphs = text.split(/\n\n+/).map(p =>
+    `<p>${escHtml(p.trim())}</p>`).join('');
+
+  let inner = `<div class="narrative-text">${paragraphs}</div>`;
+  if (hint && G.config.game.show_hints !== false) {
+    inner += `<div class="hint-text">${escHtml(hint)}</div>`;
+  }
+  el.innerHTML = inner;
+  narrativeContent().appendChild(el);
+  scrollNarrative();
+}
+
+function appendSystemMessage(text) {
+  const el = document.createElement('div');
+  el.className = 'narrative-entry';
+  el.innerHTML = `<div class="system-message">${escHtml(text)}</div>`;
+  narrativeContent().appendChild(el);
+  scrollNarrative();
+}
+
+function appendChapterComplete() {
+  const next = G.chapterIndex + 1;
+  const hasNext = next < G.chapterFiles.length;
+
+  const el = document.createElement('div');
+  el.className = 'narrative-entry chapter-advance-prompt';
+
+  if (hasNext) {
+    el.innerHTML = `
+      <div class="system-message">— Chapter complete —</div>
+      <button class="chapter-advance-btn" id="next-chapter-btn">Continue to Chapter ${next + 1}</button>
+    `;
+    narrativeContent().appendChild(el);
+    document.getElementById('next-chapter-btn').addEventListener('click', () => {
+      loadChapter(next);
+    });
+  } else {
+    el.innerHTML = `<div class="system-message">— The end —</div>`;
+    narrativeContent().appendChild(el);
+  }
+  scrollNarrative();
+}
+
+function updateLocationDisplay() {
+  document.getElementById('location-name').textContent = G.location || 'unknown';
+}
+
+function updateInventoryDisplay() {
+  const el = document.getElementById('inventory-display');
+  if (G.config.game.show_inventory === false) { el.style.display = 'none'; return; }
+  el.innerHTML = G.inventory.map(item =>
+    `<span class="inventory-item">${escHtml(item)}</span>`).join('');
+}
+
+function addToInventory(items) {
+  for (const item of items) {
+    if (!G.inventory.includes(item)) G.inventory.push(item);
+  }
+  updateInventoryDisplay();
+}
+
+function removeFromInventory(items) {
+  G.inventory = G.inventory.filter(i => !items.includes(i));
+  updateInventoryDisplay();
+}
+
+function enableInput() {
+  document.getElementById('player-input').disabled  = false;
+  document.getElementById('send-btn').disabled      = false;
+  document.getElementById('player-input').focus();
+}
+
+function disableInput() {
+  document.getElementById('player-input').disabled = true;
+  document.getElementById('send-btn').disabled     = true;
+}
+
+function focusInput() { document.getElementById('player-input').focus(); }
+
+function showThinking(show) {
+  const el = document.getElementById('thinking-indicator');
+  el.classList.toggle('hidden', !show);
+}
+
+function narrativeContent() { return document.getElementById('narrative-content'); }
+
+function scrollNarrative() {
+  const panel = document.getElementById('narrative-panel');
+  requestAnimationFrame(() => { panel.scrollTop = panel.scrollHeight; });
+}
+
+
+// ── Input handling ────────────────────────────────────────────────────────────
+
+document.getElementById('player-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    handlePlayerInput();
+  }
+});
+document.getElementById('send-btn').addEventListener('click', handlePlayerInput);
+
+function handlePlayerInput() {
+  const input = document.getElementById('player-input');
+  const text  = input.value.trim();
+  if (!text || G.isProcessing) return;
+  input.value = '';
+  callGameMaster(text);
+}
+
+
+// ── Utility ───────────────────────────────────────────────────────────────────
+
+async function fetchJSON(url) {
+  const r = await fetch(url);
+  if (!r.ok) throw new Error(`Failed to fetch ${url}: ${r.status}`);
+  return r.json();
+}
+
+async function fetchText(url) {
+  const r = await fetch(url);
+  if (!r.ok) throw new Error(`Failed to fetch ${url}: ${r.status}`);
+  return r.text();
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+function escHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function setLoadingStatus(msg, pct) {
+  document.getElementById('loading-status').textContent = msg;
+  document.getElementById('loading-bar').style.width = pct + '%';
+}
+
+
+// ── Start ─────────────────────────────────────────────────────────────────────
+
+boot().catch(err => {
+  document.getElementById('loading-status').textContent = 'Error: ' + err.message;
+  console.error(err);
+});
+</script>
+</body>
+</html>

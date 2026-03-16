@@ -1,0 +1,210 @@
+{
+  "generated": {
+    "polity_dome": "images/polity_dome.png",
+    "glassite_border": "images/glassite_border.png",
+    "spatterjay_town": "images/spatterjay_town.png",
+    "the_baitman_tavern": "images/the_baitman_tavern.png",
+    "spatterjay_docks": "images/spatterjay_docks.png",
+    "shuttle_landing_pad": "images/shuttle_landing_pad.png",
+    "metrotel_exterior": "images/metrotel_exterior.png",
+    "ambels_ship_deck": "images/ambels_ship_deck.png",
+    "ambels_ship_cabin": "images/ambels_ship_cabin.png",
+    "the_sargassum": "images/the_sargassum.png",
+    "open_ocean_night": "images/open_ocean_night.png",
+    "rocky_island_shore": "images/rocky_island_shore.png",
+    "skinners_island": "images/skinners_island.png",
+    "island_beach_pyre": "images/island_beach_pyre.png",
+    "ocean_atoll": "images/ocean_atoll.png",
+    "prador_crash_site": "images/prador_crash_site.png",
+    "creature_sail": "images/creature_sail.png",
+    "creature_giant_leech": "images/creature_giant_leech.png",
+    "creature_prill": "images/creature_prill.png",
+    "creature_glister": "images/creature_glister.png",
+    "creature_turbul": "images/creature_turbul.png",
+    "creature_molly_carp": "images/creature_molly_carp.png",
+    "creature_frog_whelk": "images/creature_frog_whelk.png",
+    "the_skinner_creature": "images/the_skinner_creature.png",
+    "prador_warrior": "images/prador_warrior.png",
+    "old_hooper_captain": "images/old_hooper_captain.png",
+    "keech_reification": "images/keech_reification.png",
+    "hooper_bare_knuckle_fight": "images/hooper_bare_knuckle_fight.png",
+    "turbul_harvest": "images/turbul_harvest.png",
+    "arrival_by_aircab": "images/arrival_by_aircab.png",
+    "frisk_in_coffin": "images/frisk_in_coffin.png",
+    "skinner_beheading": "images/skinner_beheading.png",
+    "leech_feeding_frenzy": "images/leech_feeding_frenzy.png",
+    "sail_and_ship": "images/sail_and_ship.png"
+  },
+  "manifest": {
+    "polity_dome": {
+      "type": "location",
+      "path": "images/polity_dome.png",
+      "prompt": "enormous geodesic glass and metal dome structure on a partially artificial island, clean cultivated gardens visible inside through transparent panels, stark contrast with wild alien ocean outside, futuristic arcology towers within the dome, overcast alien sky, clinical and sterile versus savage wilderness"
+    },
+    "glassite_border": {
+      "type": "location",
+      "path": "images/glassite_border.png",
+      "prompt": "sharp boundary line between manicured Polity gardens and decaying alien wilderness, transparent glassite barrier, clean cultivated grass on one side, rotting organic remains and alien vegetation on the other, oppressive overcast sky, frontier world atmosphere, dramatic contrast between sterile civilization and savage nature"
+    },
+    "spatterjay_town": {
+      "type": "location",
+      "path": "images/spatterjay_town.png",
+      "prompt": "grimy frontier settlement outside the Polity dome, rough wooden and metal buildings on a partially artificial island, weathered signs, muddy walkways, old nautical equipment, alien sea visible between buildings, oppressive humidity, inhabited by massive weathered figures, biopunk gritty atmosphere"
+    },
+    "the_baitman_tavern": {
+      "type": "location",
+      "path": "images/the_baitman_tavern.png",
+      "prompt": "dimly lit alien tavern interior, low ceiling with hanging nets and nautical equipment, rough-hewn tables stained with decades of use, flickering bioluminescent lights, enormous weathered figures hunched over drinks, skinning knives visible on belts, barrels of pickle along the walls, salt-encrusted windows overlooking dark water, oppressive and dangerous atmosphere"
+    },
+    "spatterjay_docks": {
+      "type": "location",
+      "path": "images/spatterjay_docks.png",
+      "prompt": "weathered alien dockside, wooden and metal jetties extending into dark choppy water, old Hooper sailing vessels moored with thick rope, nets draped with strange catches, barrels of pickled turbul stacked high, massive figures working in the rain, alien sea creatures visible beneath the surface, grim industrial atmosphere"
+    },
+    "shuttle_landing_pad": {
+      "type": "location",
+      "path": "images/shuttle_landing_pad.png",
+      "prompt": "floating shuttle landing platform above the alien ocean, curved walkway extending to shore, utilitarian metal construction, atmospheric entry burns visible in overcast sky, small figures dwarfed by the platform structure, waves crashing far below, frontier world arrival atmosphere"
+    },
+    "metrotel_exterior": {
+      "type": "location",
+      "path": "images/metrotel_exterior.png",
+      "prompt": "pyramidal hotel structure inside the Polity dome, clean white and chrome architecture, automated entry systems, stark contrast to the alien world outside the dome walls, artificial lighting creating a bubble of civilization, walkways connecting to arcology towers"
+    },
+    "ambels_ship_deck": {
+      "type": "location",
+      "path": "images/ambels_ship_deck.png",
+      "prompt": "weathered wooden and metal sailing vessel deck on an alien ocean, coiled ropes and fishing equipment, barrels of brine and pickle, blood-stained planking from the day's catch, mast rigging silhouetted against two alien moons, bioluminescent ocean glowing below, ancient and salt-encrusted everything"
+    },
+    "ambels_ship_cabin": {
+      "type": "location",
+      "path": "images/ambels_ship_cabin.png",
+      "prompt": "cramped dimly lit ship captain's cabin, low wooden beams, charts and navigational instruments, a locked chest in the corner, rough bunk, lantern casting orange light, porthole showing dark alien ocean, centuries of use visible in every worn surface"
+    },
+    "the_sargassum": {
+      "type": "location",
+      "path": "images/the_sargassum.png",
+      "prompt": "vast alien sargasso sea stretching to the horizon, thick mats of alien seaweed in purple and brown, strange bioluminescent organisms tangled within, a sailing vessel barely moving through the dense mass, oppressive silence, mist rising from the weed, deeply unsettling and primordial atmosphere"
+    },
+    "open_ocean_night": {
+      "type": "location",
+      "path": "images/open_ocean_night.png",
+      "prompt": "vast dark alien ocean at night, two moons reflecting on black water, massive bioluminescent creatures visible as glowing shapes beneath the surface, distant lightning illuminating storm clouds, alien constellations above, oppressive scale, deep purple and black tones, threatening and magnificent"
+    },
+    "rocky_island_shore": {
+      "type": "location",
+      "path": "images/rocky_island_shore.png",
+      "prompt": "jagged volcanic rocks on a desolate island shore, alien kelp and strange organisms clinging to every surface, crashing dark waves, twisted peartrunk trees and yanwood on the slopes above, leech holes visible in the tidal zone, grey overcast sky, isolated and dangerous"
+    },
+    "skinners_island": {
+      "type": "location",
+      "path": "images/skinners_island.png",
+      "prompt": "remote and desolate island, dense alien vegetation, evidence of ancient violence, rusted remnants of old equipment half-consumed by alien growth, unsettling quiet, peartrunk trees dripping with moisture, something deeply wrong with the atmosphere, dread and historical horror"
+    },
+    "island_beach_pyre": {
+      "type": "location",
+      "path": "images/island_beach_pyre.png",
+      "prompt": "dark alien beach at night, massive bonfire pyre of alien wood burning with blue-tinged flames, massive hooded figures standing in a circle around it, shadows dancing, smoke rising into a moonlit sky, ocean at the edge of the firelight, ritual and ancient atmosphere"
+    },
+    "ocean_atoll": {
+      "type": "location",
+      "path": "images/ocean_atoll.png",
+      "prompt": "low coral atoll barely above the waterline, alien sea on all sides, strange calcified structures, bioluminescent organisms in the surrounding shallows, deep trench visible as a dark void beyond the reef edge, remote and vulnerable, strange beauty"
+    },
+    "prador_crash_site": {
+      "type": "location",
+      "path": "images/prador_crash_site.png",
+      "prompt": "massive crashed alien spacecraft half-embedded in a rocky island, Prador technology - organic and mechanical fused, cracked carapace plating, sparking systems, alien fluids leaking into the ground, devastation radius of scorched rock, eerie stillness after catastrophic impact"
+    },
+    "creature_sail": {
+      "type": "creature",
+      "path": "images/creature_sail.png",
+      "prompt": "enormous alien creature resembling a vast living sail, translucent membrane stretched between organic spars, spanning thirty meters, riding ocean winds, bioluminescent patterns rippling across its surface, alien intelligence visible in its single massive eye, both beautiful and terrifying, alien ocean horizon behind it"
+    },
+    "creature_giant_leech": {
+      "type": "creature",
+      "path": "images/creature_giant_leech.png",
+      "prompt": "enormous alien leech the size of a car, glistening dark segmented body dripping with brine, circular mouth ringed with concentric rows of barbed teeth, muscular and horrifying, surging from dark ocean water, leaving a wake of foam and slime, visceral body horror"
+    },
+    "creature_prill": {
+      "type": "creature",
+      "path": "images/creature_prill.png",
+      "prompt": "alien predator with multiple articulated sickle-legs curved like scimitars, hard chitinous body, fast and aggressive, low to the ground, compound eyes reflecting light, mandibles visible, alien jungle background, danger and speed conveyed in its posture"
+    },
+    "creature_glister": {
+      "type": "creature",
+      "path": "images/creature_glister.png",
+      "prompt": "alien predator with rows of serrated crystalline claws, translucent body showing dark internal organs, bioluminescent lure extending from its head, multiple limbs, semi-aquatic, emerging from dark water onto rocks, deeply unsettling alien biology"
+    },
+    "creature_turbul": {
+      "type": "creature",
+      "path": "images/creature_turbul.png",
+      "prompt": "school of large alien fish-like creatures, muscular bodies, primitive and aggressive, dark water, a trawl net full of them being hauled aboard a ship, their skeletons visible as the Hoopers strip them rapidly, alien and unsettling biology"
+    },
+    "creature_molly_carp": {
+      "type": "creature",
+      "path": "images/creature_molly_carp.png",
+      "prompt": "massive alien carp-like creature, heavily armored scales, enormous body barely fitting in shallow water, ancient and implacable, following a figure along a shoreline, single massive eye above the waterline, patient and terrifying intelligence"
+    },
+    "creature_frog_whelk": {
+      "type": "creature",
+      "path": "images/creature_frog_whelk.png",
+      "prompt": "alien creature combining features of a frog and a giant whelk shell, powerful rear legs for leaping, tentacles around a crushing mouth, mottled skin, tide pool environment, sudden explosive movement implied in its posture, deeply alien biology"
+    },
+    "the_skinner_creature": {
+      "type": "creature",
+      "path": "images/the_skinner_creature.png",
+      "prompt": "grotesque barely-human figure, body massively overgrown with alien viral fibres, muscles like steel cables visible beneath translucent skin, face distorted into something barely recognizable, moving with terrifying speed and power, hatred and predatory hunger in its eyes, body horror and tragedy combined"
+    },
+    "prador_warrior": {
+      "type": "creature",
+      "path": "images/prador_warrior.png",
+      "prompt": "massive alien Prador in heavy armored carapace, crablike with multiple armored legs and huge clawed arms, alien weapons integrated into carapace plating, compound eyes behind armored visor, twice the size of a human, deeply threatening and alien, cold and mechanical aggression"
+    },
+    "old_hooper_captain": {
+      "type": "character",
+      "path": "images/old_hooper_captain.png",
+      "prompt": "ancient Hooper captain, enormously muscular body altered by centuries of viral infection, skin like weathered leather over cables of alien muscle, fingers thick as rope, face deeply lined with age but unnervingly vital, wearing salt-crusted oilskins, carrying a skinning knife the size of a sword, eyes that have seen three hundred years of ocean, radiating unstoppable physicality and calm danger"
+    },
+    "keech_reification": {
+      "type": "character",
+      "path": "images/keech_reification.png",
+      "prompt": "gaunt grey figure in a utile monofilament overall, half-helmet cybernetic augmentation covering one side of skull, copper triangular contacts set into grey skin, cobra-shaped irrigator extending to one eye, metal covering portions of the body, moves with deliberate mechanical precision, deeply unsettling blend of corpse and machine, expressionless and relentless"
+    },
+    "hooper_bare_knuckle_fight": {
+      "type": "scene",
+      "path": "images/hooper_bare_knuckle_fight.png",
+      "prompt": "two enormous Hoopers fighting bare-knuckled in a crowded tavern, fists like sledgehammers, crowd of massive weathered figures shouting around them, blood and sweat flying, neither fighter going down despite devastating blows, the superhuman toughness of viral-infected bodies on full display, dim tavern lighting, visceral and brutal"
+    },
+    "turbul_harvest": {
+      "type": "scene",
+      "path": "images/turbul_harvest.png",
+      "prompt": "Hooper crew efficiently processing turbul on a ship deck, massive alien fish-creatures being stripped to bare skeletons with practiced speed, blood and brine everywhere, skeletons thrown overboard still swimming, barrels of alien meat being packed in pickle, industrial brutality and alien biology, overcast ocean horizon"
+    },
+    "arrival_by_aircab": {
+      "type": "scene",
+      "path": "images/arrival_by_aircab.png",
+      "prompt": "old Skyrover Macrojet aircab descending toward a partially artificial island in stormy weather, alien ocean visible far below, geodesic dome structures visible on the island, turbulent atmospheric entry, sense of arriving somewhere dangerous and strange, dramatic angle"
+    },
+    "frisk_in_coffin": {
+      "type": "scene",
+      "path": "images/frisk_in_coffin.png",
+      "prompt": "metallic coffin sealed shut on a dark beach, massive Hooper figures standing around it in the firelight, ocean in the background, the coffin slightly moving from within, the horrible implication of centuries of imprisonment, torchlight casting dramatic shadows, grim and final atmosphere"
+    },
+    "skinner_beheading": {
+      "type": "scene",
+      "path": "images/skinner_beheading.png",
+      "prompt": "massive old Hooper captain swinging a machete to behead a grotesque creature on a rocky island, bioluminescent hornets swarming around the scene, alien forest background, dramatic torchlight, the creature's body still moving despite the blow, visceral and cathartic violence"
+    },
+    "leech_feeding_frenzy": {
+      "type": "scene",
+      "path": "images/leech_feeding_frenzy.png",
+      "prompt": "dead giant leech floating on dark alien ocean, surrounded by a churning feeding frenzy of boxies, frog whelks, hammer whelks, turbul and glisters all attacking simultaneously, the water white with foam and dark with alien blood, chaotic and terrifying alien ecology in action"
+    },
+    "sail_and_ship": {
+      "type": "scene",
+      "path": "images/sail_and_ship.png",
+      "prompt": "Hooper sailing vessel dwarfed by an enormous living sail creature riding the same wind, the creature's bioluminescent membrane casting strange light on the ship's deck, the crew watching in awe and wariness, alien ocean, dramatic scale difference, beautiful and threatening simultaneously"
+    }
+  }
+}
